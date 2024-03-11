@@ -11,40 +11,83 @@
     
     <div id="board"></div>
     <script>
+
+        //mélange aléatoirement à chaque raffraichissement 
+        function shuffleChildren(parent){
+            let children = parent.children
+            let i = children.length, k, temp
+                while(--i > 0){ //on boucle tant que 1 oté de i est toujours positif
+                    //k stocke un nombre aléatoire basé sur i
+                    k = Math.floor(Math.random() * (i+1))
+                    //temp pointe temporairement l'élément à la position k dans le parent
+                    temp = children[k]
+                    //remplace l'élément à la position k par l'élément à la position i
+                    children[k] = children[i]
+                    //place l'élément k pointé temporairement à la fin du contenu parent
+                    parent.appendChild(temp)
+                }  
+        }
+
+        function showReaction(type, clickedBox){
+            clickedBox.classList.add(type)
+            if(type !== "success"){
+                setTimeout(function(){
+                    clickedBox.classList.remove(type)
+                }, 800)
+            }
+        }
+
         //appel de la methode creatElement() avec en argument la balise ("div" dans cet exemple)
         const box = document.createElement("div")
         //appel de la méthode add() de classList
         box.classList.add("box") // ajout de la classe .box
         
         const board = document.querySelector("#board")
-        // board.appendChild(box)//appendChild() est une méthode qui place un élément du DOM à la fin du contenu de l'élément visé. Pour ajouter du contenu au début, on utilisera la méthode prepend()
-        // box.innerText = 1 //ajoute le numéro 1 sur la boite
+
+        // initialisation d'un chiffre qui s'incrémentera plus tard une fois l'event click effectué
+        let nb = 1 
 
         for(let i = 1; i <= 10; i++){
-            let newbox = box.cloneNode()
-            newbox.innerText = i
+            //nouvelle constante newbox qui aura pour valeur non pas l'élément box mais une copie, un clone de celui-ci grâce à la méthode cloneNode()
+            const newbox = box.cloneNode()
+            // ajoute le numéro i sur la nouvelle boite
+            newbox.innerText = i 
+            // méthode qui place un élément du DOM à la fin du contenu de l'élément visé.
             board.appendChild(newbox)
+
+            //a chaque click, l'action se lit dans la console "Boite n°..., click !"
+            newbox.addEventListener("click", function(){
+                if(i == nb){
+                    newbox.classList.add("box-valid")
+                    //1
+                    if(nb == board.children.length){ //Si nb est égal au nombre de boites du jeu, c'est que le dernier clic était sur la dernière boite → victoire
+                        board.querySelectorAll(".box").forEach(function(box){ //orEach() sur toutes les boites du jeu pour appeler showReaction()
+                            showReaction("success", box)
+                        })
+                    }
+                    nb++
+                }
+                //2 
+                else if(i > nb){ //Si le numéro de la boite est supérieur à nb, c'est que le joueur a cliqué une boite trop élevée → game over !
+                    showReaction("error", newbox)
+                    nb = 1
+                    board.querySelectorAll(".box-valid").forEach(function(validBox){ //sélectionner les boites grisées en passant par l'élément board(qui les contiennent) et suprimer l'argument "valid-box" passé en valeur
+                        validBox.classList.remove("box-valid")
+                    })
+                }
+                //3
+                else{ //Dernière possibilité : le joueur a cliqué sur une boite déjà grisée. On l'informe simplement de cela, le jeu ne redémarre pas.
+                    showReaction("notice", newbox)
+                }
+            })
         }
-        //nouvelle variable (let newbox) qui aura pour valeur non pas l'élément box mais une copie, un clone de celui-ci grâce à la méthode cloneNode()
 
-        //mélanger aléatoirement à chaque raffraichissement =>  mélange de Fisher-Yates Pour   i allant de n − 1 à 1 faire :
-                                                                                            // j ← entier aléatoire entre 0 et i
-                                                                                            // échanger a[j] et a[i]
+        shuffleChildren(board)
 
-        let i = board.children.length, k, temp
-        while(--i > 0){ //on boucle tant que 1 oté de i est toujours positif
-           //k stocke un nombre aléatoire basé sur i
-            k = Math.floor(Math.random() * (i+1))
-            //temp pointe temporairement l'élément à la position k dans board
-            temp = board.children[k]
-            //remplace l'élément à la position k par l'élément à la position i
-            board.children[k] = board.children[i]
-            //place l'élément k pointé temporairement à la fin du contenu de board
-            board.appendChild(temp)
-        }                                                                                    
-        // stockons dans une constante (préférable aux variables 
-        // lorsqu'on créé un élément du DOM, pour garantir l'intégrité de l'élément tout au long du 
-        // code sans pouvoir réassigner sa valeur).
-    </script>
+        
+                                                                                  
+        // stockons dans une constante (préférable aux variables lorsqu'on créé un élément du DOM, pour garantir l'intégrité de l'élément tout au long du code sans pouvoir réassigner sa valeur).
+   
+   </script>
 </body>
 </html>
