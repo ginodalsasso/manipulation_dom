@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="board"></div>
+    <script>
+        //appel de la methode creatElement() avec en argument la balise ("div" dans cet exemple)
+        const box = document.createElement("div")
+        //appel de la méthode add() de classList
+        box.classList.add("box") // ajout de la classe .box
+        
+        const board = document.querySelector("#board")
+        // board.appendChild(box)//appendChild() est une méthode qui place un élément du DOM à la fin du contenu de l'élément visé. Pour ajouter du contenu au début, on utilisera la méthode prepend()
+        // box.innerText = 1 //ajoute le numéro 1 sur la boite
+
+        for(let i = 1; i <= 10; i++){
+            let newbox = box.cloneNode()
+            newbox.innerText = i
+            board.appendChild(newbox)
+        }
+        //nouvelle variable (let newbox) qui aura pour valeur non pas l'élément box mais une copie, un clone de celui-ci grâce à la méthode cloneNode()
+
+        //mélanger aléatoirement à chaque raffraichissement =>  mélange de Fisher-Yates Pour   i allant de n − 1 à 1 faire :
+                                                                                            // j ← entier aléatoire entre 0 et i
+                                                                                            // échanger a[j] et a[i]
+
+        let i = board.children.length, k, temp
+        while(--i > 0){ //on boucle tant que 1 oté de i est toujours positif
+           //k stocke un nombre aléatoire basé sur i
+            k = Math.floor(Math.random() * (i+1))
+            //temp pointe temporairement l'élément à la position k dans board
+            temp = board.children[k]
+            //remplace l'élément à la position k par l'élément à la position i
+            board.children[k] = board.children[i]
+            //place l'élément k pointé temporairement à la fin du contenu de board
+            board.appendChild(temp)
+        }                                                                                    
+        // stockons dans une constante (préférable aux variables 
+        // lorsqu'on créé un élément du DOM, pour garantir l'intégrité de l'élément tout au long du 
+        // code sans pouvoir réassigner sa valeur).
+    </script>
+</body>
+</html>
