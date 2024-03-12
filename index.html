@@ -9,8 +9,17 @@
 </head>
 <body>
     
+
     <div id="board"></div>
+    <div class="watche"></div>
+    <div class="data"><h2>Tableau des scores</h2>
+        <p><span class="result-data"></span></p>
+    </div>
+
+
     <script>
+        //window.prompt affichera à l'utilisateur une boite de dialogue dans laquelle il saisira un nombre
+        const saisirNb = Number(window.prompt("Veuillez saisir un nombre.", ""))
 
         //mélange aléatoirement à chaque raffraichissement 
         function shuffleChildren(parent){
@@ -44,10 +53,10 @@
         
         const board = document.querySelector("#board")
 
-        // initialisation d'un chiffre qui s'incrémentera plus tard une fois l'event click effectué
+        // initialisation d'un chiffre qui s'incrémentera plus tard une fois l'event click effectué, 
         let nb = 1 
 
-        for(let i = 1; i <= 10; i++){
+        for(let i = 1; i <= saisirNb; i++){ //constante saisirNb pour afficher le nb de card demandé par l'utilisateur
             //nouvelle constante newbox qui aura pour valeur non pas l'élément box mais une copie, un clone de celui-ci grâce à la méthode cloneNode()
             const newbox = box.cloneNode()
             // ajoute le numéro i sur la nouvelle boite
@@ -66,11 +75,14 @@
                         })
                     }
                     nb++
+                    shuffleChildren(board) //instance de la fonction "aléatoire" à chaque "success" on remélange !
+
                 }
                 //2 
                 else if(i > nb){ //Si le numéro de la boite est supérieur à nb, c'est que le joueur a cliqué une boite trop élevée → game over !
                     showReaction("error", newbox)
                     nb = 1
+                    shuffleChildren(board) //instance de la fonction "aléatoire"  à chaque erreur on remélange !
                     board.querySelectorAll(".box-valid").forEach(function(validBox){ //sélectionner les boites grisées en passant par l'élément board(qui les contiennent) et suprimer l'argument "valid-box" passé en valeur
                         validBox.classList.remove("box-valid")
                     })
@@ -80,12 +92,27 @@
                     showReaction("notice", newbox)
                 }
             })
+
+
+            function timer(t){ //t prenant la valeure à laquelle le timer commencera
+                console.log(t) //affiche le timer à partir de 1
+                const timer = setInterval(function(){ 
+                    t++ //incrémente tout les 1000 milisec de 1
+                    console.log(t)
+                    const watche = document.querySelector(".watche") //selectionne la classe watche
+                    watche.innerText = t //affiche mon timer dans mon html
+                    if(i == (nb-1)){ //nb-1 car nb est initialisé à un plus haut et nous voulons arriver à "zero boites restantes"
+                        clearInterval(timer)
+                    }
+
+                }, 1000)//t++ à 1000 milisec
+            }
         }
 
-        shuffleChildren(board)
+        timer(1) //instance du timer à 1 sinon mon timer commence à 2
 
-        
-                                                                                  
+        shuffleChildren(board)
+                                                                        
         // stockons dans une constante (préférable aux variables lorsqu'on créé un élément du DOM, pour garantir l'intégrité de l'élément tout au long du code sans pouvoir réassigner sa valeur).
    
    </script>

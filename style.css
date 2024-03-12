@@ -40,6 +40,14 @@
     cursor: not-allowed;
 }
 
+.watche{
+    font-size: 24px;
+    font-style: bold;
+    color: rgb(212, 250, 76);
+    background-color: black;
+    border-radius: 5px;
+}
+
 @keyframes appear{
     from{
         transform: scale(0) rotate(180deg)
