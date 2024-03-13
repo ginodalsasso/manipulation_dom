@@ -10,3 +10,4 @@
 
 - Finally, if the player clicks on a previously validated box (the game expected them to click on box 4, but they clicked on box 2, for instance), a message informs them that this box has already been clicked. However, the game does not stop; it continues uninterrupted.
 
+![Capture d'écran 2024-03-13 220623 copie](https://github.com/ginodalsasso/manipulation_dom/assets/159161313/073c5217-75b1-4bd0-af47-e4ec569a0e5d)
